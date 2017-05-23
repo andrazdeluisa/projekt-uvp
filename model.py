@@ -10,11 +10,6 @@ class Polje:
         return 'Polje(vrstica={}, stolpec={}, vrednost={})'.format(
             self.vrstica, self.stolpec, self.vrednost)
 
-    def postavi_mino(self):
-        if self.vrednost < 0:
-            return False
-        self.vrednost = -10
-        return True
 
 
 class Igra:
@@ -24,11 +19,11 @@ class Igra:
         self.st_min = st_min
         self.seznam_polj = []
         for i in range(self.st_vrstic):
-            self.seznam_polj_v_vrstici = []
+            self.seznam_polj_v_vrstici = []     
             for j in range(self.st_stolpcev):
                 Polje(i, j)
-                self.seznam_polj_v_vrstici.append(Polje(i, j))
-            self.seznam_polj.append(self.seznam_polj_v_vrstici)
+                self.seznam_polj_v_vrstici.append(Polje(i, j))     
+            self.seznam_polj.append(self.seznam_polj_v_vrstici)   
 
     def __repr__(self):
         return str(self.seznam_polj)
@@ -48,39 +43,21 @@ class Igra:
     def postavi_mine(self):
         self.seznam_min = []
         for i in range(self.st_min):
-            x, y = random.randrange(self.st_vrstic), random.randrange(self.st_stolpcev)
-            polje = self.seznam_polj[x][y]
-            polje.postavi_mino()
-            self.seznam_min.append(polje)
+            while True:
+                polje = random.choice(random.choice(self.seznam_polj))
+                if polje not in self.seznam_min:
+                    polje.vrednost = -10
+                    self.seznam_min.append(polje)
+                    break
         return self.seznam_polj
 
     def doloci_vrednosti(self):
-
         for polje in self.seznam_min:
-            
-            if polje.vrstica == self.st_vrstic and polje.stolpec == self.st_stolpcev:
-                for x in range(polje.vrstica - 1, polje.vrstica + 1):
-                    for y in range(polje.stolpec - 1, polje.stolpec + 1):
-                        sosednje_polje = self.seznam_polj[x][y]
-                        sosednje_polje.vrednost += 1
-
-            elif polje.vrstica == self.st_vrstic and polje.stolpec < self.st_stolpcev:
-                for x in range(polje.vrstica - 1, polje.vrstica + 1):
-                    for y in range(polje.stolpec - 1, polje.stolpec + 1):
-                        sosednje_polje = self.seznam_polj[x][y]
-                        sosednje_polje.vrednost += 1
-
-            elif polje.vrstica < self.st_vrstic and polje.stolpec == self.st_stolpcev:
-                for x in range(polje.vrstica - 1, polje.vrstica + 1):
-                    for y in range(polje.stolpec - 1, polje.stolpec + 1):
-                        sosednje_polje = self.seznam_polj[x][y]
-                        sosednje_polje.vrednost += 1
-            else:
-                for x in range(polje.vrstica -1, polje.vrstica + 1):
-                    for y in range(polje.stolpec - 1, polje.stolpec + 1):
-                        sosednje_polje = self.seznam_polj[x][y]
-                        sosednje_polje.vrednost += 1
-
+                for x in range(polje.vrstica -1, polje.vrstica + 2):
+                    for y in range(polje.stolpec - 1, polje.stolpec + 2):
+                        if 0 <= x < self.st_vrstic and 0 <= y < self.st_stolpcev:
+                            sosednje_polje = self.seznam_polj[x][y]
+                            sosednje_polje.vrednost += 1
         return self.seznam_polj
             
         

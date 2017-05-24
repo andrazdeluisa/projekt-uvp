@@ -5,11 +5,42 @@ class Polje:
         self.vrstica = vrstica
         self.stolpec = stolpec
         self.vrednost = 0
+        self.zastavica = False
 
     def __repr__(self):
         return 'Polje(vrstica={}, stolpec={}, vrednost={})'.format(
             self.vrstica, self.stolpec, self.vrednost)
 
+    def postavi_zastavico(self):
+        self.zastavica = not self.zastavica
+        return self
+
+    def odkrij_polje(self):
+        igra = IGRA
+        if self in igra.seznam_odkritih:
+            return 
+        elif self.vrednost < 0:
+            return print('Zadel si mino')
+        elif self.vrednost > 0:
+            igra.seznam_odkritih.append(self)
+            return print('Naslednja poteza')     
+        elif self.vrednost == 0:
+            self.odkrij_sosednje()
+            igra.seznam_odkritih.append(self)
+    
+    def odkrij_sosednje(self):
+        igra = IGRA
+        for x in range(self.vrstica -1, self.vrstica + 2):
+            for y in range(self.stolpec - 1, self.stolpec + 2):
+                if 0 <= x < igra.st_vrstic and 0 <= y < igra.st_stolpcev:
+                    sosednje_polje = igra.seznam_polj[x][y]
+                    if sosednje_polje not in igra.seznam_odkritih:
+                        sosednje_polje.odkrij_polje()
+        return 
+
+
+# problem: kako odkriti sosednja polja tako, da ni treba ponovno odkriti prvega polja
+# (max recursion depth)
 
 
 class Igra:
@@ -18,6 +49,7 @@ class Igra:
         self.st_stolpcev = st_stolpcev
         self.st_min = st_min
         self.seznam_polj = []
+        self.seznam_odkritih = []
         for i in range(self.st_vrstic):
             self.seznam_polj_v_vrstici = []     
             for j in range(self.st_stolpcev):
@@ -33,10 +65,15 @@ class Igra:
         for x in range(self.st_vrstic):
             for y in range(self.st_stolpcev):
                 polje = self.seznam_polj[x][y]
-                if polje.vrednost < 0:
+                if polje.zastavica:
+                    niz += '#'
+                elif polje.vrednost < 0:
                     niz += '*'
-                else:
+                elif polje.vrednost >= 0 and polje not in self.seznam_odkritih:
                     niz += '{}'.format(polje.vrednost)
+                elif polje in self.seznam_odkritih:
+                    niz += '-'
+                
             niz += '\n'
         return niz
     
@@ -59,12 +96,17 @@ class Igra:
                             sosednje_polje = self.seznam_polj[x][y]
                             sosednje_polje.vrednost += 1
         return self.seznam_polj
-            
+
+                
         
         
-igra = Igra(10,10,10)
-igra.postavi_mine()
-igra.doloci_vrednosti()
-print(igra)
+IGRA = Igra(10,10,10)
+IGRA.postavi_mine()
+IGRA.doloci_vrednosti()
+IGRA.seznam_polj[0][0].postavi_zastavico()
+IGRA.seznam_polj[2][2].odkrij_polje()
+
+
+print(IGRA)
 
         

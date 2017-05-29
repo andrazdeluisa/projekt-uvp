@@ -13,13 +13,15 @@ class Polje:
 
     def postavi_zastavico(self):
         self.zastavica = not self.zastavica
-        return self
+        return print(IGRA)
 
     def odkrij_polje(self):
         igra = IGRA
         if self in igra.seznam_odkritih:
             return 
         elif self.vrednost < 0:
+            igra.seznam_odkritih.append(self)
+            print(igra)
             return print('Zadel si mino')
         elif self.vrednost > 0:
             igra.seznam_odkritih.append(self)
@@ -40,9 +42,6 @@ class Polje:
         return igra.seznam_odkritih
 
 
-# problem: kako odkriti sosednja polja tako, da ni treba ponovno odkriti prvega polja
-# (max recursion depth)
-
 
 class Igra:
     def __init__(self, st_vrstic, st_stolpcev, st_min):
@@ -62,20 +61,22 @@ class Igra:
         return str(self.seznam_polj)
 
     def __str__(self):
-        niz = ''
+        niz = ' ' + self.st_stolpcev * '-' + '\n'
         for x in range(self.st_vrstic):
+            niz += '|'
             for y in range(self.st_stolpcev):
                 polje = self.seznam_polj[x][y]
                 if polje.zastavica:
                     niz += '#'
-                elif polje.vrednost < 0:
-                    niz += '*'
-                elif polje.vrednost >= 0 and polje not in self.seznam_odkritih:
-                    niz += '{}'.format(polje.vrednost)
-                elif polje in self.seznam_odkritih:
-                    niz += '-'
-                
-            niz += '\n'
+                elif polje not in self.seznam_odkritih:
+                    niz += ' '
+                else:
+                    if polje.vrednost < 0:
+                        niz += '*'
+                    elif polje.vrednost >= 0:
+                        niz += '{}'.format(polje.vrednost)     
+            niz += '| \n'
+        niz += ' ' + self.st_stolpcev * '-'
         return niz
     
     def postavi_mine(self):
@@ -104,8 +105,8 @@ class Igra:
 IGRA = Igra(10,10,10)
 IGRA.postavi_mine()
 IGRA.doloci_vrednosti()
-IGRA.seznam_polj[0][0].postavi_zastavico()
-IGRA.seznam_polj[2][2].odkrij_polje()
+
+
 
 
 print(IGRA)

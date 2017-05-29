@@ -25,18 +25,19 @@ class Polje:
             igra.seznam_odkritih.append(self)
             return print('Naslednja poteza')     
         elif self.vrednost == 0:
-            self.odkrij_sosednje()
             igra.seznam_odkritih.append(self)
+            self.odkrij_sosednja()
+            
     
-    def odkrij_sosednje(self):
+    def odkrij_sosednja(self):
         igra = IGRA
-        for x in range(self.vrstica -1, self.vrstica + 2):
-            for y in range(self.stolpec - 1, self.stolpec + 2):
-                if 0 <= x < igra.st_vrstic and 0 <= y < igra.st_stolpcev:
-                    sosednje_polje = igra.seznam_polj[x][y]
-                    if sosednje_polje not in igra.seznam_odkritih:
-                        sosednje_polje.odkrij_polje()
-        return 
+        for x in range(self.vrstica - 1, self.vrstica + 2):
+            for y in range(self.stolpec - 1, self.stolpec + 2):   
+                    if 0 <= x < igra.st_vrstic and 0 <= y < igra.st_stolpcev:
+                        sosednje_polje = igra.seznam_polj[x][y]
+                        if sosednje_polje not in igra.seznam_odkritih:
+                            sosednje_polje.odkrij_polje()
+        return igra.seznam_odkritih
 
 
 # problem: kako odkriti sosednja polja tako, da ni treba ponovno odkriti prvega polja

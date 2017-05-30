@@ -1,5 +1,6 @@
 import tkinter
 import tkinter.messagebox
+import model
 
 top = tkinter.Tk()
 

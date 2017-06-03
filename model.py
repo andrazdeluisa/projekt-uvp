@@ -22,13 +22,15 @@ class Polje:
         elif self.vrednost < 0:
             igra.seznam_odkritih.append(self)
             print(igra)
-            return print('Zadel si mino')
+            print('Zadel si mino')
         elif self.vrednost > 0:
             igra.seznam_odkritih.append(self)
-            return print('Naslednja poteza')     
+            print('Naslednja poteza')
         elif self.vrednost == 0:
             igra.seznam_odkritih.append(self)
             self.odkrij_sosednja()
+        if len(igra.seznam_odkritih) + igra.st_min == igra.st_vrstic * igra.st_stolpcev:
+            print('Zmaga!')
             
     
     def odkrij_sosednja(self):
@@ -105,6 +107,7 @@ class Igra:
 IGRA = Igra(10,10,10)
 IGRA.postavi_mine()
 IGRA.doloci_vrednosti()
+IGRA.seznam_polj[1][1].odkrij_polje()
 
 
 

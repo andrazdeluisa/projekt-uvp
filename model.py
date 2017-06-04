@@ -13,7 +13,7 @@ class Polje:
 
     def postavi_zastavico(self):
         self.zastavica = not self.zastavica
-        return print(IGRA)
+        
 
     def odkrij_polje(self):
         igra = IGRA
@@ -21,7 +21,6 @@ class Polje:
             return 
         elif self.vrednost < 0:
             igra.seznam_odkritih.append(self)
-            print(igra)
             print('Zadel si mino')
         elif self.vrednost > 0:
             igra.seznam_odkritih.append(self)
@@ -29,9 +28,7 @@ class Polje:
         elif self.vrednost == 0:
             igra.seznam_odkritih.append(self)
             self.odkrij_sosednja()
-        if len(igra.seznam_odkritih) + igra.st_min == igra.st_vrstic * igra.st_stolpcev:
-            print('Zmaga!')
-            
+        igra.zmaga()     
     
     def odkrij_sosednja(self):
         igra = IGRA
@@ -41,7 +38,9 @@ class Polje:
                         sosednje_polje = igra.seznam_polj[x][y]
                         if sosednje_polje not in igra.seznam_odkritih:
                             sosednje_polje.odkrij_polje()
-        return igra.seznam_odkritih
+
+    
+         
 
 
 
@@ -57,7 +56,10 @@ class Igra:
             for j in range(self.st_stolpcev):
                 Polje(i, j)
                 self.seznam_polj_v_vrstici.append(Polje(i, j))     
-            self.seznam_polj.append(self.seznam_polj_v_vrstici)   
+            self.seznam_polj.append(self.seznam_polj_v_vrstici)
+
+        self.postavi_mine()
+        self.doloci_vrednosti()
 
     def __repr__(self):
         return str(self.seznam_polj)
@@ -90,7 +92,7 @@ class Igra:
                     polje.vrednost = -10
                     self.seznam_min.append(polje)
                     break
-        return self.seznam_polj
+        
 
     def doloci_vrednosti(self):
         for polje in self.seznam_min:
@@ -99,19 +101,13 @@ class Igra:
                         if 0 <= x < self.st_vrstic and 0 <= y < self.st_stolpcev:
                             sosednje_polje = self.seznam_polj[x][y]
                             sosednje_polje.vrednost += 1
-        return self.seznam_polj
-
-                
-        
-        
-IGRA = Igra(10,10,10)
-IGRA.postavi_mine()
-IGRA.doloci_vrednosti()
-IGRA.seznam_polj[1][1].odkrij_polje()
-
-
-
-
-print(IGRA)
+                            
+    def zmaga(self):
+        if len(self.seznam_odkritih) + self.st_min == self.st_vrstic * self.st_stolpcev:
+            print('Zmaga!')
+            return True
 
         
+        
+IGRA = Igra(10, 10, 10)
+

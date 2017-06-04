@@ -41,8 +41,10 @@ class PaziMina:
          for stolpec in range(self.plosca.st_stolpcev):
             if self.plosca.seznam_polj[vrstica][stolpec] in self.plosca.seznam_odkritih:   
                gumb = self.gumbi[vrstica][stolpec]
-               gumb.config(text='{}'.format(self.plosca.seznam_polj[vrstica][stolpec].vrednost), state='disabled', bg = 'white')
-               
+               if self.plosca.seznam_polj[vrstica][stolpec].vrednost > 0:
+                  gumb.config(text='{}'.format(self.plosca.seznam_polj[vrstica][stolpec].vrednost), state='disabled', bg = 'white')
+               elif self.plosca.seznam_polj[vrstica][stolpec].vrednost == 0:
+                  gumb.config(text='', state='disabled', bg = 'white')
                            
    def poraz(self):
       for vrstica in range(self.plosca.st_vrstic):

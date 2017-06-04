@@ -2,6 +2,8 @@ import tkinter as tk
 import tkinter.messagebox
 import model
 
+FONT = ("Arial",14,"bold")
+
 
 class PaziMina:
    def __init__(self, okno):
@@ -17,7 +19,7 @@ class PaziMina:
          for stolpec in range(self.plosca.st_stolpcev):
             def pritisni_gumb(vrstica = vrstica, stolpec = stolpec):
                self.odkrij(vrstica, stolpec)
-            gumb = tk.Button(prikaz_plosce, text='', height=2, width=2, command=pritisni_gumb, font=("Arial",14,"bold")) 
+            gumb = tk.Button(prikaz_plosce, text='', height=2, width=2, command=pritisni_gumb, font=FONT) 
             gumb.grid(row=vrstica, column=stolpec)
             vrstica_gumbov.append(gumb)
          self.gumbi.append(vrstica_gumbov)
@@ -25,9 +27,10 @@ class PaziMina:
 
 
    def odkrij(self, vrstica, stolpec):
-      self.plosca.seznam_polj[vrstica][stolpec].odkrij_polje()
+      polje = self.plosca.seznam_polj[vrstica][stolpec]
+      polje.odkrij_polje()
       self.osvezi_prikaz()
-      if self.plosca.seznam_polj[vrstica][stolpec] in self.plosca.seznam_min:
+      if polje in self.plosca.seznam_min:
          self.poraz()
       if self.plosca.zmaga():
          self.zmaga2()
@@ -39,11 +42,12 @@ class PaziMina:
    def osvezi_prikaz(self):
       for vrstica in range(self.plosca.st_vrstic):
          for stolpec in range(self.plosca.st_stolpcev):
-            if self.plosca.seznam_polj[vrstica][stolpec] in self.plosca.seznam_odkritih:   
+            polje = self.plosca.seznam_polj[vrstica][stolpec]
+            if polje in self.plosca.seznam_odkritih:   
                gumb = self.gumbi[vrstica][stolpec]
-               if self.plosca.seznam_polj[vrstica][stolpec].vrednost > 0:
-                  gumb.config(text='{}'.format(self.plosca.seznam_polj[vrstica][stolpec].vrednost), state='disabled', bg = 'white')
-               elif self.plosca.seznam_polj[vrstica][stolpec].vrednost == 0:
+               if polje.vrednost > 0:
+                  gumb.config(text='{}'.format(polje.vrednost), state='disabled', bg = 'white')
+               elif polje.vrednost == 0:
                   gumb.config(text='', state='disabled', bg = 'white')
                            
    def poraz(self):

@@ -19,7 +19,7 @@ class PaziMina:
          for stolpec in range(self.plosca.st_stolpcev):
             def pritisni_gumb(vrstica = vrstica, stolpec = stolpec):
                self.odkrij(vrstica, stolpec)
-            gumb = tk.Button(prikaz_plosce, text='', height=2, width=2, command=pritisni_gumb, font=FONT) 
+            gumb = tk.Button(prikaz_plosce, text='', height=1, width=2, command=pritisni_gumb, font=FONT) 
             gumb.grid(row=vrstica, column=stolpec)
             vrstica_gumbov.append(gumb)
          self.gumbi.append(vrstica_gumbov)

@@ -15,34 +15,6 @@ class Polje:
         self.zastavica = not self.zastavica
         
 
-    def odkrij_polje(self):
-        igra = IGRA
-        if self in igra.seznam_odkritih:
-            return 
-        elif self.vrednost < 0:
-            igra.seznam_odkritih.append(self)
-            print('Zadel si mino')
-        elif self.vrednost > 0:
-            igra.seznam_odkritih.append(self)
-            print('Naslednja poteza')
-        elif self.vrednost == 0:
-            igra.seznam_odkritih.append(self)
-            self.odkrij_sosednja()
-        igra.zmaga()     
-    
-    def odkrij_sosednja(self):
-        igra = IGRA
-        for x in range(self.vrstica - 1, self.vrstica + 2):
-            for y in range(self.stolpec - 1, self.stolpec + 2):   
-                    if 0 <= x < igra.st_vrstic and 0 <= y < igra.st_stolpcev:
-                        sosednje_polje = igra.seznam_polj[x][y]
-                        if sosednje_polje not in igra.seznam_odkritih:
-                            sosednje_polje.odkrij_polje()
-
-    
-         
-
-
 
 class Igra:
     def __init__(self, st_vrstic, st_stolpcev, st_min):
@@ -101,13 +73,38 @@ class Igra:
                         if 0 <= x < self.st_vrstic and 0 <= y < self.st_stolpcev:
                             sosednje_polje = self.seznam_polj[x][y]
                             sosednje_polje.vrednost += 1
+
+
+    def odkrij_polje(self, vrstica, stolpec):
+        polje = self.seznam_polj[vrstica][stolpec]
+        if polje in self.seznam_odkritih:
+            return 
+        elif polje.vrednost < 0:
+            self.seznam_odkritih.append(polje)
+            print('Zadel si mino')
+        elif polje.vrednost > 0:
+            self.seznam_odkritih.append(polje)
+            print('Naslednja poteza')
+        elif polje.vrednost == 0:
+            self.seznam_odkritih.append(polje)
+            self.odkrij_sosednja(vrstica, stolpec)
+        self.zmaga()     
+    
+
+    def odkrij_sosednja(self, vrstica, stolpec):
+        polje = self.seznam_polj[vrstica][stolpec]
+        for x in range(polje.vrstica - 1, polje.vrstica + 2):
+            for y in range(polje.stolpec - 1, polje.stolpec + 2):   
+                    if 0 <= x < self.st_vrstic and 0 <= y < self.st_stolpcev:
+                        sosednje_polje = self.seznam_polj[x][y]
+                        if sosednje_polje not in self.seznam_odkritih:
+                            self.odkrij_polje(x, y)
+
+
                             
     def zmaga(self):
         if len(self.seznam_odkritih) + self.st_min == self.st_vrstic * self.st_stolpcev:
             print('Zmaga!')
             return True
 
-        
-        
-IGRA = Igra(10, 10, 10)
 

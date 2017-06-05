@@ -3,11 +3,12 @@ import tkinter.messagebox
 import model
 
 FONT = ("Arial",14,"bold")
+IGRA = model.Igra(10, 10, 10)
 
 
 class PaziMina:
    def __init__(self, okno):
-      self.plosca = model.IGRA
+      self.plosca = IGRA
 
       self.obvestilo = tk.Label(okno, text='Dobrodošel v igri Pazi, mina!')
       self.obvestilo.grid(row=0, column=0)
@@ -28,7 +29,7 @@ class PaziMina:
 
    def odkrij(self, vrstica, stolpec):
       polje = self.plosca.seznam_polj[vrstica][stolpec]
-      polje.odkrij_polje()
+      self.plosca.odkrij_polje(vrstica, stolpec)
       self.osvezi_prikaz()
       if polje in self.plosca.seznam_min:
          self.poraz()

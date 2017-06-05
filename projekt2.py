@@ -3,11 +3,12 @@ import tkinter.messagebox
 import model2
 
 FONT = ("Arial",14,"bold")
+IGRA = model2.Igra(10, 10, 10)
 
 
 class PaziMina:
    def __init__(self, okno):
-      self.plosca = model2.IGRA
+      self.plosca = IGRA
 
       self.obvestilo = tk.Label(okno, text='Dobrodošel v igri Pazi, mina!')
       self.obvestilo.grid(row=0, column=0)
@@ -19,7 +20,7 @@ class PaziMina:
          for stolpec in range(self.plosca.st_stolpcev):
             def pritisni_gumb(vrstica = vrstica, stolpec = stolpec):
                self.odkrij(vrstica, stolpec)
-            gumb = tk.Button(prikaz_plosce, text='', height=2, width=2, command=pritisni_gumb, font=FONT) 
+            gumb = tk.Button(prikaz_plosce, text='', height=1, width=2, command=pritisni_gumb, font=FONT) 
             gumb.grid(row=vrstica, column=stolpec)
             vrstica_gumbov.append(gumb)
          self.gumbi.append(vrstica_gumbov)
@@ -28,7 +29,7 @@ class PaziMina:
 
    def odkrij(self, vrstica, stolpec):
       polje = self.plosca.seznam_polj[vrstica][stolpec]
-      polje.odkrij_polje()
+      self.plosca.odkrij_polje(vrstica, stolpec)
       self.osvezi_prikaz()
       if polje in self.plosca.seznam_min:
          self.poraz()

@@ -7,6 +7,7 @@ class Polje:
         self.vrednost = 0
         self.zastavica = False
 
+
     def __repr__(self):
         return 'Polje(vrstica={}, stolpec={}, vrednost={})'.format(
             self.vrstica, self.stolpec, self.vrednost)
@@ -30,8 +31,10 @@ class Igra:
         self.postavi_mine()
         self.doloci_vrednosti()
 
+
     def __repr__(self):
         return str(self.seznam_polj)
+
 
     def __str__(self):
         niz = ' ' + self.st_stolpcev * '-' + '\n'
@@ -51,6 +54,7 @@ class Igra:
             niz += '| \n'
         niz += ' ' + self.st_stolpcev * '-'
         return niz
+
     
     def postavi_mine(self):
         self.seznam_min = []
@@ -95,6 +99,7 @@ class Igra:
                         sosednje_polje = self.seznam_polj[x][y]
                         if sosednje_polje not in self.seznam_odkritih:
                             self.odkrij_polje(x, y)
+
 
     def postavi_zastavico(self, vrstica, stolpec):
         polje = self.seznam_polj[vrstica][stolpec]

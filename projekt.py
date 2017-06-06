@@ -18,10 +18,14 @@ class PaziMina:
       for vrstica in range(self.plosca.st_vrstic):
          vrstica_gumbov = []
          for stolpec in range(self.plosca.st_stolpcev):
-            def pritisni_gumb(vrstica = vrstica, stolpec = stolpec):
+            def pritisni_gumb(event, vrstica = vrstica, stolpec = stolpec):
                self.odkrij(vrstica, stolpec)
-            gumb = tk.Button(prikaz_plosce, text='', height=1, width=2, command=pritisni_gumb, font=FONT) 
+            def postavi_zastavico(event, vrstica = vrstica, stolpec = stolpec):
+               self.zastavica(vrstica, stolpec)
+            gumb = tk.Button(prikaz_plosce, text='', height=1, width=2, font=FONT) 
             gumb.grid(row=vrstica, column=stolpec)
+            gumb.bind('<Button-1>', pritisni_gumb)
+            gumb.bind('<Button-3>', postavi_zastavico)
             vrstica_gumbov.append(gumb)
          self.gumbi.append(vrstica_gumbov)
       prikaz_plosce.grid(row=1, column=0)
@@ -37,8 +41,14 @@ class PaziMina:
          self.zmaga2()
 
    def zastavica(self, vrstica, stolpec):
-      self.plosca.seznam_polj[vrstica][stolpec].postavi_zastavico()
-      self.gumbi[vrstica][stolpec].config(text='#', state='disabled', bg = 'blue')
+      polje = self.plosca.seznam_polj[vrstica][stolpec]
+      if polje in self.plosca.seznam_odkritih:
+         return
+      self.plosca.postavi_zastavico(vrstica, stolpec)
+      if polje.zastavica:
+         self.gumbi[vrstica][stolpec].config(text='#', bg='blue')
+      elif not polje.zastavica:
+         self.gumbi[vrstica][stolpec].config(text='', bg='grey')
 
    def osvezi_prikaz(self):
       for vrstica in range(self.plosca.st_vrstic):
@@ -47,9 +57,9 @@ class PaziMina:
             if polje in self.plosca.seznam_odkritih:   
                gumb = self.gumbi[vrstica][stolpec]
                if polje.vrednost > 0:
-                  gumb.config(text='{}'.format(polje.vrednost), state='disabled', bg = 'white')
+                  gumb.config(text='{}'.format(polje.vrednost), state='disabled', bg='white')
                elif polje.vrednost == 0:
-                  gumb.config(text='', state='disabled', bg = 'white')
+                  gumb.config(text='', state='disabled', bg='white')
                            
    def poraz(self):
       for vrstica in range(self.plosca.st_vrstic):

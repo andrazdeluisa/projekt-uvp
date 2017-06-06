@@ -10,9 +10,6 @@ class Polje:
     def __repr__(self):
         return 'Polje(vrstica={}, stolpec={}, vrednost={})'.format(
             self.vrstica, self.stolpec, self.vrednost)
-
-    def postavi_zastavico(self):
-        self.zastavica = not self.zastavica
         
 
 
@@ -84,7 +81,6 @@ class Igra:
             print('Zadel si mino')
         elif polje.vrednost > 0:
             self.seznam_odkritih.append(polje)
-            print('Naslednja poteza')
         elif polje.vrednost == 0:
             self.seznam_odkritih.append(polje)
             self.odkrij_sosednja(vrstica, stolpec)
@@ -100,6 +96,12 @@ class Igra:
                         if sosednje_polje not in self.seznam_odkritih:
                             self.odkrij_polje(x, y)
 
+    def postavi_zastavico(self, vrstica, stolpec):
+        polje = self.seznam_polj[vrstica][stolpec]
+        if polje in self.seznam_odkritih:
+            return
+        else:
+            polje.zastavica = not polje.zastavica
 
                             
     def zmaga(self):

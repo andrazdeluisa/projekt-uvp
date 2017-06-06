@@ -3,31 +3,30 @@ import tkinter.messagebox
 import model
 
 FONT = ("Arial", 14, "bold")
-VRSTICE = 10
-STOLPCI = 10
-MINE = 10
-
-
+FONT2 = ("Arial", 12, "bold")
 
 class PaziMina:
-   def __init__(self, okno):
-      self.plosca = model.Igra(VRSTICE, STOLPCI, MINE)
+   def __init__(self, okno, vrstice, stolpci, mine):
+      self.vrstice = vrstice
+      self.stolpci = stolpci
+      self.mine = mine
+      
+      self.plosca = model.Igra(self.vrstice, self.stolpci, self.mine)
 
       self.obvestilo = tk.Label(okno, text='Dobrodošel v igri Pazi, mina!', height=2, font=FONT)
       self.obvestilo.grid(row=0, column=0)
 
-      self.stevec_min = tk.Label(okno, text='{}'.format(MINE), width=4, font=FONT)
+      self.stevec_min = tk.Label(okno, text='{}'.format(self.mine), width=4, font=FONT)
       self.stevec_min.grid(row=0, column=1)
-
 
       prikaz_plosce = tk.Frame(okno)
       self.gumbi = []
       for vrstica in range(self.plosca.st_vrstic):
          vrstica_gumbov = []
          for stolpec in range(self.plosca.st_stolpcev):
-            def pritisni_gumb(event, vrstica = vrstica, stolpec = stolpec):
+            def pritisni_gumb(event, vrstica=vrstica, stolpec=stolpec):
                self.odkrij(vrstica, stolpec)
-            def postavi_zastavico(event, vrstica = vrstica, stolpec = stolpec):
+            def postavi_zastavico(event, vrstica=vrstica, stolpec=stolpec):
                self.zastavica(vrstica, stolpec)
             gumb = tk.Button(prikaz_plosce, text='', height=1, width=2, font=FONT, bg='light grey') 
             gumb.grid(row=vrstica, column=stolpec)
@@ -69,7 +68,7 @@ class PaziMina:
             polje = self.plosca.seznam_polj[vrstica][stolpec]
             if polje.zastavica:
                st_zastavic += 1
-      self.stevec_min.config(text='{}'.format(MINE - st_zastavic))
+      self.stevec_min.config(text='{}'.format(self.mine - st_zastavic))
 
 
    def osvezi_prikaz(self):
@@ -87,24 +86,53 @@ class PaziMina:
    def poraz(self):
       for vrstica in range(self.plosca.st_vrstic):
          for stolpec in range(self.plosca.st_stolpcev):
+            gumb = self.gumbi[vrstica][stolpec]
+            gumb.config(state='disabled') 
             if self.plosca.seznam_polj[vrstica][stolpec] in self.plosca.seznam_min:   
-               gumb = self.gumbi[vrstica][stolpec]
-               gumb.config(text='*', state='disabled', bg = 'tomato')
+               gumb.config(text='*', bg='tomato')     
       tk.messagebox.showerror('Pazi mina', 'Game over')              
 
 
    def zmaga2(self):
       for vrstica in range(self.plosca.st_vrstic):
          for stolpec in range(self.plosca.st_stolpcev):
-            if self.plosca.seznam_polj[vrstica][stolpec] in self.plosca.seznam_min:   
-               gumb = self.gumbi[vrstica][stolpec]
-               gumb.config(text='*', state='disabled', bg = 'lawn green')
+            gumb = self.gumbi[vrstica][stolpec]
+            if self.plosca.seznam_polj[vrstica][stolpec] in self.plosca.seznam_min:     
+               gumb.config(text='*', state='disabled', bg='lawn green')
       tk.messagebox.showinfo('Pazi mina', 'Bravo, zmaga!!!')
 
 
 
-okno = tk.Tk()
-moja_igra = PaziMina(okno)
-okno.mainloop()
+
+def lahko():
+   okno2 = tk.Toplevel()
+   moja_igra = PaziMina(okno2, 9, 9, 10)
+
+def srednje():
+   okno2 = tk.Toplevel()
+   moja_igra = PaziMina(okno2, 16, 16, 40)
+
+def tezko():
+   okno2 = tk.Toplevel()
+   moja_igra = PaziMina(okno2, 16, 30, 99)
+   
+
+
+
+okno1 = tk.Tk()
+
+tezavnost = tk.Label(okno1, text='Izberi težavnost', font=FONT, height=2, width=14)
+tezavnost.pack()
+
+gumb1 = tk.Button(text='Lahko', command=lahko, font=FONT2, height=2, width=10)
+gumb1.pack()
+
+gumb2 = tk.Button(text='Srednje', command=srednje, font=FONT2, height=2, width=10)
+gumb2.pack()
+
+gumb3 = tk.Button(text='Težko', command=tezko, font=FONT2, height=2, width=10)
+gumb3.pack()
+
+okno1.mainloop()
 
 

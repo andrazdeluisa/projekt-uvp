@@ -114,4 +114,3 @@ class Igra:
             print('Zmaga!')
             return True
 
-

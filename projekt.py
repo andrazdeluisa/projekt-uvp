@@ -134,5 +134,3 @@ gumb3 = tk.Button(text='Težko', command=tezko, font=FONT2, height=2, width=10)
 gumb3.pack()
 
 okno1.mainloop()
-
-

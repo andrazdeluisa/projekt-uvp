@@ -10,16 +10,17 @@ class PaziMina:
       self.vrstice = vrstice
       self.stolpci = stolpci
       self.mine = mine
+      self.okno = okno
       
       self.plosca = model.Igra(self.vrstice, self.stolpci, self.mine)
 
-      self.obvestilo = tk.Label(okno, text='Dobrodošel v igri Pazi, mina!', height=2, font=FONT)
+      self.obvestilo = tk.Label(self.okno, text='Dobrodošel v igri Pazi, mina!', height=2, font=FONT)
       self.obvestilo.grid(row=0, column=0)
 
-      self.stevec_min = tk.Label(okno, text='{}'.format(self.mine), width=4, font=FONT)
+      self.stevec_min = tk.Label(self.okno, text='{}'.format(self.mine), width=4, font=FONT)
       self.stevec_min.grid(row=0, column=1)
 
-      prikaz_plosce = tk.Frame(okno)
+      prikaz_plosce = tk.Frame(self.okno)
       self.gumbi = []
       for vrstica in range(self.plosca.st_vrstic):
          vrstica_gumbov = []
@@ -90,7 +91,8 @@ class PaziMina:
             gumb.config(state='disabled') 
             if self.plosca.seznam_polj[vrstica][stolpec] in self.plosca.seznam_min:   
                gumb.config(text='*', bg='tomato')     
-      tk.messagebox.showerror('Pazi mina', 'Game over')              
+      tk.messagebox.showerror('Pazi mina', 'Game over')
+      self.okno.destroy()
 
 
    def zmaga2(self):
@@ -100,6 +102,7 @@ class PaziMina:
             if self.plosca.seznam_polj[vrstica][stolpec] in self.plosca.seznam_min:     
                gumb.config(text='*', state='disabled', bg='lawn green')
       tk.messagebox.showinfo('Pazi mina', 'Bravo, zmaga!!!')
+      self.okno.destroy()
 
 
 
